@@ -5,24 +5,34 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using _27Jan2022.ViewModels;
+using Data.DAL;
+using Microsoft.EntityFrameworkCore;
 
 namespace _27Jan2022.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly AppDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(AppDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var courses = await _context.Courses.ToListAsync();
+            var homeVM = new HomeVM
+            {
+                Courses = courses
+            };
+            return View(homeVM);
         }
 
-      
-         
+       
+
+
+
     }
 }
